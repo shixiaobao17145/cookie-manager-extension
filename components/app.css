@@ -1,0 +1,15 @@
+.ant-layout-header{
+	z-index:9999
+}
+.header	.ant-input-affix-wrapper{
+	color:#fff;
+	width: 220px;
+}
+
+.cookie-filter{
+	color:#fff;
+	background: #333;
+	border-radius: 6px;
+	margin: 16px 24px 16px 0;
+	float: left;
+}
