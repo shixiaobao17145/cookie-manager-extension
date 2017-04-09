@@ -1,10 +1,11 @@
+var path = require('path');
 module.exports = {
-	devtool: 'inline-sourcemap',
+	devtool: 'source-map',
 	entry: {
-		manager:"./manager.js"
+		manager:"./manager.entry.js"
 	},
 	output: {
-		path: __dirname,
+		path: path.resolve(__dirname, 'build'),
 		filename: "[name].bundle.js"
 	},
 	module: {

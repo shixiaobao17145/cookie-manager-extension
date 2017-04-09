@@ -1,9 +1,11 @@
 {
-  "name": "Cookie Manager Extension",
+  "name": "cookie-manager-extension",
   "version": "0.0.1",
   "description": "",
   "main": "background.js",
-  "scripts": {
+	"scripts": {
+		"build":"webpack --config webpack.config.prod.js --optimize-minimize",
+		"dev":"webpack -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

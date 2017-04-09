@@ -13,8 +13,8 @@ export default class ManagerApp extends React.Component {
 			filterKey:''
 		}
 	}
-	updateFilter(value){
-		//let v = e.target.value;
+	updateFilter(e){
+		let value = e.target.value;
 		this.setState({
 			filterKey:value
 		});
@@ -23,7 +23,7 @@ export default class ManagerApp extends React.Component {
 		return (
 			<Layout>
 				<Header style={{ position: 'fixed', width: '100%' }} className="header">
-					<Search placeholder="filter domain" className="cookie-filter" onSearch={(e)=>this.updateFilter(e)}/>
+					<Search placeholder="filter domain" className="cookie-filter" onKeyUp={(e)=>this.updateFilter(e)}/>
 				</Header>
 				<Content style={{ padding: '0 50px', marginTop: 64 }}>
 					<CookieTable filterKey={this.state.filterKey}/>

@@ -2,6 +2,7 @@ import React from 'react'
 import { Collapse,Table,Input,Popover,Button,Col,Popconfirm } from 'antd';
 let InputGroup = Input.Group;
 import { cache, setCookie, removeCookie, init, emitter } from '../apis/Cookies';
+import * as Cookies from '../apis/Cookies';
 
 export default class CookieTable extends React.Component {
 	constructor(props){
@@ -11,7 +12,6 @@ export default class CookieTable extends React.Component {
 		}
 	}
 	onActiveChange(key){
-		console.log(arguments);
 		this.setState({
 			expandDomain:key
 		});
@@ -43,6 +43,7 @@ export default class CookieTable extends React.Component {
 	}
 	componentDidMount(){
 		init();
+		window.Cookies = Cookies;
 		emitter.on('change', ()=>{
 			this.setState({
 				domains:cache.getDomains(this.props.filterKey)
@@ -50,8 +51,6 @@ export default class CookieTable extends React.Component {
 		});
 	}
 	renderCookies(cks){
-		let shareCookie = this.shareCookie.bind(this);
-		let deleteCookie = this.deleteCookie.bind(this);
 		const columns = [{
 			title: 'Name',
 			dataIndex: 'name',
@@ -85,24 +84,25 @@ export default class CookieTable extends React.Component {
 			width:190,
 			render:(what, cookie)=>{
 				let input;
+				let popover;
 				let content = (
 					<InputGroup size="large">
-					    <Col span="15">
+					    <Col span="20">
 					        <Input defaultValue="localhost" ref={(ipt)=>{input=ipt;}}/>
 					    </Col>
-					    <Col span="9">
-					        <Button onClick={()=>shareCookie(what, cookie, input)}>Ok</Button>
+					    <Col span="4">
+					        <Button type="primary" onClick={()=>this.shareCookie(what, cookie, input)}>Ok</Button>
 					    </Col>
 					</InputGroup>
 				);
 				return (
 					<div>
 						<Popover content={content} title="Share to Domain" trigger="click">
-							<Button>Share</Button>
+							<Button type="primary">Share</Button>
 						</Popover>
 
-						<Popconfirm title="Are you sure delete this cookie?" onConfirm={()=>deleteCookie(what, cookie)}  okText="Yes" cancelText="No" >
-							&nbsp;<Button>Delete</Button>
+						<Popconfirm title="Are you sure delete this cookie?" onConfirm={()=>this.deleteCookie(what, cookie)}  okText="Yes" cancelText="No" >
+							<Button className="btn-space" type="danger">Delete</Button>
 						</Popconfirm>
 					</div>
 				)
@@ -111,7 +111,8 @@ export default class CookieTable extends React.Component {
 		return (
 			<Table columns={columns}
 				   rowKey={(record)=>{
-						   return record.domain + "|" + record.name + Math.random()
+						   let {domain, name, path} = record;
+						   return [domain, name,path].join(' | ');
 					   }}
 				   dataSource={cks}
 				   pagination={false}
@@ -120,7 +121,7 @@ export default class CookieTable extends React.Component {
 	}
 	render(){
 		let { filterKey } = this.props;
-		console.log('filterKey', filterKey);
+//		console.log('filterKey', filterKey);
 		
 		return (
 			<Collapse  onChange={(key)=>this.onActiveChange(key)} accordion>
